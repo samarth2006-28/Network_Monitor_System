@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEMS | Network Event Monitor</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --success: #238636;
+            --warning: #d29922;
+            --critical: #f85149;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            padding: 40px;
+            margin: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 { margin: 0; font-size: 24px; color: var(--accent-color); }
+
+        /* --- Pulsing Status Indicator --- */
+        .status-container {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #30363d;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            background-color: #2ea043;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            box-shadow: 0 0 0 rgba(46, 160, 67, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 160, 67, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0); }
+        }
+
+        .status-text { font-size: 14px; font-weight: bold; color: #2ea043; }
+
+        /* --- Table Styling --- */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+        }
+
+        th { 
+            background-color: #1f242c; 
+            color: var(--accent-color); 
+            text-align: left; 
+            padding: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        td { 
+            padding: 15px; 
+            border-bottom: 1px solid #30363d; 
+            font-size: 14px;
+        }
+
+        tr:hover { background-color: #1c2128; }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .CRITICAL { background: rgba(248, 81, 73, 0.1); color: var(--critical); border: 1px solid var(--critical); }
+        .WARNING { background: rgba(210, 153, 34, 0.1); color: var(--warning); border: 1px solid var(--warning); }
+        .INFO { background: rgba(88, 166, 255, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>Network Event Monitoring System</h1>
+            <p style="color: #8b949e; margin: 5px 0 0 0;">Real-time Packet Analysis & Event Logging</p>
+        </div>
+        <div class="status-container">
+            <span class="dot"></span>
+            <span class="status-text">SYSTEM LIVE</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Priority</th>
+                <th>Source Address</th>
+                <th>Destination Address</th>
+                <th>Event Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td style="color: #8b949e;">{{ event[1] }}</td>
+                <td>
+                    <span class="badge {{ 'CRITICAL' if 'CRITICAL' in event[2] else 'WARNING' }}">
+                        {{ event[2].split(':')[0] }}
+                    </span>
+                </td>
+                <td style="font-family: monospace;">{{ event[3] }}</td>
+                <td style="font-family: monospace;">{{ event[4] }}</td>
+                <td>{{ event[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

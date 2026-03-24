@@ -1,0 +1,24 @@
+# --- Python Files ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# --- Databases & Logs (Keep the folder, ignore the files) ---
+# We want to keep the data/ and logs/ folders, but not the actual data inside.
+data/*.db
+logs/*.log
+
+# --- IDE & System Files ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Configuration ---
+# If you have private API keys or IPs in a .env file, ignore it
+.env

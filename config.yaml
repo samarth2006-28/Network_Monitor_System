@@ -1,0 +1,19 @@
+# NEMS Configuration Settings
+
+# Networking
+monitor_ip: "192.168.0.163"  # Change this to Laptop A's current IP
+web_port: 5000
+
+# Security Rules
+rules:
+  packet_size_threshold: 1500  # Bytes
+  critical_ports:
+    - 22    # SSH
+    - 23    # Telnet
+    - 3389  # RDP
+    - 445   # SMB
+
+# Storage Paths
+paths:
+  database: "data/events.db"
+  log_file: "logs/network_events.log"
