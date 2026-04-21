@@ -3,49 +3,53 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=flat&logo=flask&logoColor=white)
 ![Scapy](https://img.shields.io/badge/Security-Scapy-red)
-![License](https://img.shields.io/badge/license-MIT-green)
+![SQLite](https://img.shields.io/badge/Database-SQLite-003B57)
 
-**NEMS** is a modular, full-stack Network Intrusion Detection System (IDS) designed to provide real-time visibility into network traffic. It sniffs raw packets, analyzes them for security threats, and visualizes the data through a modern, responsive web dashboard.
+**NEMS** (Network Event Monitoring System) is a modular, full-stack Intrusion Detection System (IDS) prototype. It intercepts raw network packets, analyzes metadata for security anomalies, and visualizes the data through a high-performance web dashboard.
 
 ---
 
-## 🌟 Key Features
+## 🚀 Key Features
 
-- **⚡ Real-Time Sniffing:** Leverages the **Scapy** library to intercept and parse raw packets at the Data Link and Network layers.
-- **🚨 Threat Detection:** Automatically flags unauthorized access attempts on sensitive ports (SSH, Telnet, RDP) as **CRITICAL**.
-- **📊 Bandwidth Monitoring:** Identifies potential data exfiltration or heavy streaming by flagging packets exceeding MTU limits.
-- **🖥️ Live Dashboard:** A Flask-powered "Security Operations Center" (SOC) interface with a pulsing status indicator and event prioritization.
-- **🗄️ Persistent Logging:** Dual-storage system using **SQLite** for structured data and flat-file logs for audit trails.
+- **⚡ Live Packet Ingestion:** Utilizes **Scapy** for raw socket sniffing at the Data Link and Network layers.
+- **🚨 Intelligent Threat Analysis:** Rule-based engine that flags unauthorized port access (SSH/Telnet) and MTU violations.
+- **📊 Real-Time SOC Dashboard:** A Flask-powered "Security Operations Center" interface with dynamic event prioritization and a "System Live" heartbeat.
+- **🗄️ Relational Persistence:** Fully structured **SQLite** database integration for historical event auditing.
+- **🔌 Multi-Node Testing:** Includes a dedicated Traffic Generator script to simulate network attacks from a client machine.
 
 ---
 
 ## 🏗️ Technical Architecture
 
-NEMS is built with a decoupled architecture to ensure stability and low-latency packet processing.
+NEMS follows a decoupled, modular design to ensure that packet processing is not delayed by the UI rendering.
 
-| Component | Technology | Responsibility |
-| :--- | :--- | :--- |
-| **Ingestion** | Scapy (Python) | Raw packet capture and header extraction. |
-| **Analysis** | Rule-based Engine | Logic for prioritizing and filtering network events. |
-| **Storage** | SQLite | Relational storage for historical event analysis. |
-| **Interface** | Flask / Jinja2 | Web server and dynamic template rendering. |
+| Component | Responsibility |
+| :--- | :--- |
+| **The Sensor (`monitor.py`)** | The "Ear" of the system. Captures raw frames and extracts IP/TCP/UDP headers. |
+| **The Brain (`analyzer.py`)** | The "Logic" layer. Compares packet metadata against security rules in `config.yaml`. |
+| **The Memory (`database.py`)** | The "Storage" layer. Manages SQL connections and ensures data integrity. |
+| **The Interface (`web/`)** | The "Display" layer. A Flask server that provides a RESTful view of the database. |
 
 ---
 
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```text
 network-monitor-system/
-├── app/                # Backend Logic
-│   ├── analyzer.py     # Threat detection rules
-│   ├── database.py     # SQLite schema and queries
-│   ├── monitor.py      # Scapy sniffer implementation
-│   └── utils.py        # Logging and network utilities
-├── web/                # Frontend
-│   ├── dashboard.py    # Flask routing
-│   └── templates/      # HTML/CSS UI
-├── data/               # Persistent SQLite storage
-├── logs/               # Raw text log backups
-├── config.yaml         # Externalized system configuration
-├── requirements.txt    # Project dependencies
-└── run.py              # Main system entry point
+├── app/                        # Backend Core
+│   ├── __init__.py             # Python package marker
+│   ├── analyzer.py             # Security logic and threat classification
+│   ├── database.py             # SQLite schema and data insertion
+│   ├── monitor.py              # Scapy-based raw packet sniffer
+│   └── utils.py                # Terminal coloring and IP resolution
+├── web/                        # Web Dashboard
+│   ├── dashboard.py            # Flask server routing
+│   └── templates/
+│       └── index.html          # Modern Dark-Mode UI with CSS animations
+├── data/                       # Persistent database storage
+├── logs/                       # Plain-text audit log backups
+├── config.yaml                 # System settings and security thresholds
+├── README.md                   # Project documentation
+├── requirements.txt            # Dependency list
+├── run.py                      # Main entry point (Backend start)
+└── traffic_generator.py        # Client-side testing tool
